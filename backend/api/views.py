@@ -16,3 +16,16 @@ def getTasks(request):
     serializer = TaskSerializer(modelData,many=True)
     
     return Response(serializer.data,status=status.HTTP_200_OK)
+
+@api_view(["POST"])
+def create_task(request):
+    serializer = TaskSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data,status=status.HTTP_200_OK)
+
+@api_view(["DELETE"])
+def delete_task(request,pk=None):
+    modelData = Task.objects.get(pk=pk)
+    modelData.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
